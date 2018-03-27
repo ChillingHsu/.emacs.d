@@ -62,9 +62,6 @@
                                      (python . t)
                                      (ruby . t)
                                      (plantuml . t)))
-  (setq org-plantuml-jar-path
-        (expand-file-name "~/.emacs.d/plantuml.1.2018.2.jar"))
-
   (use-package ob-go
     :init
     (if (executable-find "go")
