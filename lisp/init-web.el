@@ -62,11 +62,8 @@
   :mode "\\.js$"
   :interpreter "node"
   :init
-  (add-hook 'js2-mode-hook
-            (lambda ()
-              (setq js2-basic-offset 4)
-              (js2-highlight-unused-variables-mode 1)
-              (js2-imenu-extras-mode 1)))
+  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+  (add-hook 'js2-mode-hook #'js2-highlight-unused-variables-mode)
   :config
   (use-package js2-refactor
     :diminish js2-refactor-mode
@@ -126,14 +123,22 @@
 
 ;; Live browser JavaScript, CSS, and HTML interaction
 (use-package skewer-mode
-  :diminish (skewer-mode skewer-html-mode skewer-css-mode)
+  :diminish skewer-mode
   :init
   (with-eval-after-load 'js2-mode
     (add-hook 'js2-mode-hook #'skewer-mode))
   (with-eval-after-load 'css-mode
     (add-hook 'css-mode-hook #'skewer-css-mode))
+  (with-eval-after-load 'web-mode
+    (add-hook 'web-mode-hook #'skewer-html-mode))
   (with-eval-after-load 'sgml-mode
-    (add-hook 'html-mode-hook #'skewer-html-mode)))
+    (add-hook 'html-mode-hook #'skewer-html-mode))
+
+  ;; diminish
+  (with-eval-after-load 'skewer-css
+    (diminish 'skewer-css-mode))
+  (with-eval-after-load 'skewer-html
+    (diminish 'skewer-html-mode)))
 
 ;; Format HTML, CSS and JavaScript/JSON by js-beautify
 (use-package web-beautify
