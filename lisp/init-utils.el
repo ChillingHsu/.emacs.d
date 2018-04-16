@@ -42,10 +42,6 @@
   :bind (:map help-map ("C-h" . which-key-C-h-dispatch))
   :init (add-hook 'after-init-hook #'which-key-mode))
 
-;; Context-sensitive external browse URL or Internet search
-(use-package browse-url-dwim
-  :init (add-hook 'after-init-hook #'browse-url-dwim-mode))
-
 ;; A tree layout file explorer
 (use-package treemacs
   :bind (([f8]        . treemacs-toggle)
@@ -98,7 +94,7 @@
 (use-package ag
   :init
   (with-eval-after-load 'projectile
-    (bind-key "s s" 'ag-project projectile-command-map))
+    (bind-key "s s" #'ag-project projectile-command-map))
   :config
   (setq ag-highlight-search t)
   (setq ag-reuse-buffers t))
@@ -111,7 +107,7 @@
 (use-package pt
   :init
   (with-eval-after-load 'projectile
-    (bind-key "s p" 'projectile-pt projectile-command-map)))
+    (bind-key "s p" #'projectile-pt projectile-command-map)))
 
 (use-package rg
   :init
@@ -124,30 +120,31 @@
   (setq rg-show-columns t)
 
   (with-eval-after-load 'projectile
-    (bind-key "s r" 'rg-project projectile-command-map))
+    (bind-key "s r" #'rg-project projectile-command-map))
 
   (when (fboundp 'ag)
-    (bind-key "a" 'ag rg-global-map))
+    (bind-key "a" #'ag rg-global-map))
   (when (fboundp 'pt-regexp)
-    (bind-key "P" 'pt-regexp rg-global-map))
+    (bind-key "P" #'pt-regexp rg-global-map))
 
   (with-eval-after-load 'counsel
-    (bind-key "c r" 'counsel-rg rg-global-map)
-    (bind-key "c s" 'counsel-ag rg-global-map)
-    (bind-key "c p" 'counsel-pt rg-global-map)
-    (bind-key "c f" 'counsel-fzf rg-global-map))
+    (bind-key "c r" #'counsel-rg rg-global-map)
+    (bind-key "c s" #'counsel-ag rg-global-map)
+    (bind-key "c p" #'counsel-pt rg-global-map)
+    (bind-key "c f" #'counsel-fzf rg-global-map))
 
   (with-eval-after-load 'counsel-projectile
-    (bind-key "s r" 'rg-project counsel-projectile-command-map)))
+    (bind-key "s r" #'rg-project counsel-projectile-command-map)))
 
 ;; Edit text for browsers with GhostText or AtomicChrome extension
 (use-package atomic-chrome
   :diminish
   :init (add-hook 'after-init-hook #'atomic-chrome-start-server)
   :config
-  (setq atomic-chrome-default-major-mode 'markdown-mode)
-  (setq atomic-chrome-url-major-mode-alist
-        '(("github\\.com" . gfm-mode))))
+  (with-eval-after-load 'markdown-mode
+    (setq atomic-chrome-default-major-mode 'markdown-mode)
+    (setq atomic-chrome-url-major-mode-alist
+          '(("github\\.com" . gfm-mode)))))
 
 ;; Tramp
 (use-package docker-tramp)
