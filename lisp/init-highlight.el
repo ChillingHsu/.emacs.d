@@ -73,14 +73,14 @@
 (use-package rainbow-delimiters
   :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-;; Highlight TODO and similar keywords in comments and strings
-(use-package hl-todo
-  :bind (:map hl-todo-mode-map
-              ([C-f3] . hl-todo-occur)
-              ("C-c t p" . hl-todo-previous)
-              ("C-c t n" . hl-todo-next)
-              ("C-c t o" . hl-todo-occur))
-  :init (add-hook 'after-init-hook #'global-hl-todo-mode))
+;; Highlight TODO/FIXME/BUG...
+(use-package fic-mode
+  :init (add-hook 'prog-mode-hook #'fic-mode)
+  :config
+  (setq fic-highlighted-words '("TODO" "FIXME" "FIX" "BUG" "ISSUE" "DEFECT" "WORKAROUND"))
+  (setq fic-activated-faces '(font-lock-comment-face))
+  (set-face-attribute 'fic-face nil :box t :background (face-background 'default))
+  (set-face-background 'fic-author-face (face-background 'default)))
 
 ;; Highlight uncommitted changes
 (use-package diff-hl
