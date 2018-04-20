@@ -79,6 +79,23 @@
 ;; Semantic code search for emacs lisp
 (use-package elisp-refs)
 
+;; A better *Help* buffer
+(use-package helpful
+  :bind (("C-h f" . helpful-callable)
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-h C-d" . helpful-at-point)
+         ("C-h F" . helpful-function)
+         ("C-h M" . helpful-macro)
+         ("C-h D" . helpful-command))
+  :init
+  (with-eval-after-load 'ivy
+    (cl-pushnew '(helpful-callable . "^") ivy-initial-inputs-alist)
+    (cl-pushnew '(helpful-variable . "^") ivy-initial-inputs-alist)
+    (cl-pushnew '(helpful-function . "^") ivy-initial-inputs-alist)
+    (cl-pushnew '(helpful-macro . "^") ivy-initial-inputs-alist)
+    (cl-pushnew '(helpful-command . "^") ivy-initial-inputs-alist)))
+
 (defun recompile-elpa ()
   "Recompile packages in elpa directory. Useful if you switch Emacs versions."
   (interactive)
